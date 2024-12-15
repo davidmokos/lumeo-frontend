@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { Bot, ChevronRight, SquareTerminal, type LucideIcon } from "lucide-react"
 
 import {
   Collapsible,
@@ -18,25 +18,35 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 
-export function NavMain({
-  items,
-}: {
-  items: {
+const navMain: {
+  title: string
+  url: string
+  icon?: LucideIcon
+  isActive?: boolean
+  items?: {
     title: string
     url: string
-    icon?: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
   }[]
-}) {
+}[] = [
+  {
+    title: "Discover",
+    url: "/",
+    icon: SquareTerminal,
+    isActive: true,
+  },
+  {
+    title: "Create",
+    url: "/create",
+    icon: Bot,
+  },
+]
+
+export function NavMain() {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Imagine</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => {
+        {navMain.map((item) => {
           if (!item.items) {
             return (
               <SidebarMenuItem key={item.title}>
