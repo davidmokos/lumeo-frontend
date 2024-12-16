@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { VideoGenerationSchema } from "@/lib/models/video-generation";
+import { VideoGeneration } from "@/lib/models/video-generation";
 import {
   RectangleHorizontal,
   Square,
@@ -21,9 +21,10 @@ import {
   Clock1,
   Clock2,
   Clock3,
-  Clock4,
+  Clock6,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { createVideoGeneration } from "../actions/actions";
 
 export default function GenerateForm() {
   const [prompt, setPrompt] = useState("");
@@ -33,6 +34,45 @@ export default function GenerateForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Helper function to calculate dimensions
+    const calculateDimensions = (aspectRatio: string, resolution: string) => {
+      const resolutionMap = {
+        "480p": 480,
+        "720p": 720,
+        "1080p": 1080
+      };
+
+      const height = resolutionMap[resolution as keyof typeof resolutionMap];
+      let width: number;
+
+      switch (aspectRatio) {
+        case "16:9":
+          width = Math.round((height * 16) / 9);
+          break;
+        case "1:1":
+          width = height;
+          break;
+        case "9:16":
+          width = Math.round((height * 9) / 16);
+          break;
+        default:
+          width = Math.round((height * 16) / 9); // default to 16:9
+      }
+
+      return { width, height };
+    };
+
+    const { width, height } = calculateDimensions(aspectRatio, resolution);
+
+    const data: VideoGeneration = {
+      prompt: prompt,
+      length: parseInt(duration) * 25,
+      width: width,
+      height: height,
+    }
+
+    await createVideoGeneration(data);
 
     toast({
       title: "Added to queue",
@@ -138,7 +178,7 @@ export default function GenerateForm() {
                     </SelectItem>
                     <SelectItem value="30s">
                       <div className="flex items-center gap-2">
-                        <Clock4 className="h-4 w-4" />
+                        <Clock6 className="h-4 w-4" />
                         <span>30s</span>
                       </div>
                     </SelectItem>

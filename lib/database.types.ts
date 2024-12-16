@@ -43,9 +43,11 @@ export type Database = {
           height: number | null
           id: string
           length: number | null
+          model: string | null
           negative_prompt: string | null
           prompt: string | null
           prompt_rewrite: string | null
+          replicate_prediction_id: string | null
           status: string | null
           user_id: string | null
           video_url: string | null
@@ -57,9 +59,11 @@ export type Database = {
           height?: number | null
           id?: string
           length?: number | null
+          model?: string | null
           negative_prompt?: string | null
           prompt?: string | null
           prompt_rewrite?: string | null
+          replicate_prediction_id?: string | null
           status?: string | null
           user_id?: string | null
           video_url?: string | null
@@ -71,9 +75,11 @@ export type Database = {
           height?: number | null
           id?: string
           length?: number | null
+          model?: string | null
           negative_prompt?: string | null
           prompt?: string | null
           prompt_rewrite?: string | null
+          replicate_prediction_id?: string | null
           status?: string | null
           user_id?: string | null
           video_url?: string | null

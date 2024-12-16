@@ -11,24 +11,26 @@ export const PredictionStatus = {
 export type PredictionStatus = typeof PredictionStatus[keyof typeof PredictionStatus];
 
 export const VideoGenerationSchema = z.object({
-  id: z.string().uuid(),
-  user_id: z.string().uuid().nullable(),
-  created_at: z.date().default(() => new Date()),
-  completed_at: z.date().nullable(),
+  id: z.string().uuid().nullish(),
+  user_id: z.string().uuid().nullish(),
+  created_at: z.date().nullish(),
+  completed_at: z.date().nullish(),
   status: z.enum([
     PredictionStatus.Starting,
     PredictionStatus.Processing,
     PredictionStatus.Succeeded,
     PredictionStatus.Failed,
     PredictionStatus.Canceled
-  ]).nullable(),
-  prompt: z.string().nullable(),
-  negative_prompt: z.string().nullable(),
-  prompt_rewrite: z.string().nullable(),
-  width: z.number().int().nullable(),
-  height: z.number().int().nullable(),
-  length: z.number().int().nullable(),
-  video_url: z.string().nullable(),
+  ]).nullish(),
+  prompt: z.string().nullish(),
+  negative_prompt: z.string().nullish(),
+  prompt_rewrite: z.string().nullish(),
+  width: z.number().int().nullish(),
+  height: z.number().int().nullish(),
+  length: z.number().int().nullish(),
+  video_url: z.string().nullish(),
+  model: z.string().nullish(),
+  replicate_prediction_id: z.string().nullish(),
 });
 
 export type VideoGeneration = z.infer<typeof VideoGenerationSchema>;
