@@ -1,12 +1,23 @@
-"use client"
+"use client";
 
-import { Bot, ChevronRight, Library, ListMusic, PlaySquare, SquareLibrary, SquareTerminal, Star, type LucideIcon } from "lucide-react"
+import {
+  Bot,
+  ChevronRight,
+  Library,
+  ListMusic,
+  Loader2,
+  PlaySquare,
+  SquareLibrary,
+  SquareTerminal,
+  Star,
+  type LucideIcon,
+} from "lucide-react";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,106 +27,64 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import Link from "next/link";
+import { useVideoQueue } from "@/hooks/use-video-queue";
+import { User } from "@supabase/supabase-js";
+import { usePathname } from "next/navigation";
 
-const navMain: {
-  groupLabel: string
-  items: {
-    title: string
-    url: string
-    icon?: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
-}[] = [
-  {
-    groupLabel: "Discover",
-    items: [
-      {
-        title: "Recent",
-        url: "/discover",
-        icon: PlaySquare,
-        isActive: true,
-      }
-    ]
-  },
-  // Example of another group
-  {
-    groupLabel: "Library",
-    items: [
-      {
-        title: "My Videos",
-        url: "/my-videos",
-        icon: SquareLibrary,
-      },
-      // {
-      //   title: "Favorites",
-      //   url: "/favorites",
-      //   icon: Star,
-      // }
-    ]
-  }
-]
+export function NavMain({ user }: { user: User | null }) {
+  const { queue } = useVideoQueue({ userId: user?.id ?? "" });
+  const pathname = usePathname();
 
-export function NavMain() {
   return (
     <>
-      {navMain.map((group) => (
-        <SidebarGroup key={group.groupLabel}>
-          <SidebarGroupLabel>{group.groupLabel}</SidebarGroupLabel>
-          <SidebarMenu>
-            {group.items.map((item) => {
-              if (!item.items) {
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton tooltip={item.title} asChild>
-                      <a href={item.url}>
-                        {item.icon && <item.icon />}
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              }
+      <SidebarGroup>
+        <SidebarGroupLabel>Discover</SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              isActive={pathname === "/discover"}
+              tooltip="Recent"
+              asChild
+            >
+              <Link href="/discover">
+                <PlaySquare />
+                Recent
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
 
-              return (
-                <Collapsible
-                  key={item.title}
-                  asChild
-                  defaultOpen={item.isActive}
-                  className="group/collapsible"
-                >
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton tooltip={item.title}>
-                        {item.icon && <item.icon />}
-                        <span>{item.title}</span>
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
-                              <a href={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </a>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-              )
-            })}
-          </SidebarMenu>
-        </SidebarGroup>
-      ))}
+      <SidebarGroup>
+        <SidebarGroupLabel>Library</SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              isActive={pathname === "/my-videos"}
+              tooltip="My Videos"
+              asChild
+            >
+              <Link href="/my-videos">
+                <SquareLibrary />
+                My Videos
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          {queue.length > 0 && (
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip="Queue" asChild>
+                <div className="flex items-center gap-2">
+                  <Loader2 className="animate-spin" />
+                  Generating ({queue.length})
+                </div>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+        </SidebarMenu>
+      </SidebarGroup>
     </>
-  )
+  );
 }

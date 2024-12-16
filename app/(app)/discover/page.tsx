@@ -1,16 +1,13 @@
-import { ModeToggle } from "@/components/theme-toggle";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import Image from "next/image";
-import GenerateForm from "../components/generate-form";
 import { createClient } from "@/utils/supabase/server";
+import { PredictionStatus } from "@/lib/models/video-generation";
 
-export default async function Home() {
+export default async function DiscoverPage() {
   const supabase = await createClient();
 
   const { data: generations } = await supabase
     .from("video-generations")
     .select()
-    .eq("status", "succeeded")
+    .eq("status", PredictionStatus.Succeeded)
     .order("completed_at", { ascending: false })
     .limit(20);
 
@@ -23,7 +20,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto px-1 pb-20">
         <div className="@container">
           <div className="columns-1 @[640px]:columns-2 @[1024px]:columns-3 gap-1 space-y-1">
             {videoGenerations.map((gen) => (

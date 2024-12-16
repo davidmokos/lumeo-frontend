@@ -1,11 +1,27 @@
 import { z } from "zod";
 
+export const PredictionStatus = {
+  Starting: 'starting',
+  Processing: 'processing',
+  Succeeded: 'succeeded',
+  Failed: 'failed',
+  Canceled: 'canceled'
+} as const;
+
+export type PredictionStatus = typeof PredictionStatus[keyof typeof PredictionStatus];
+
 export const VideoGenerationSchema = z.object({
   id: z.string().uuid(),
   user_id: z.string().uuid().nullable(),
   created_at: z.date().default(() => new Date()),
   completed_at: z.date().nullable(),
-  status: z.string().nullable(),
+  status: z.enum([
+    PredictionStatus.Starting,
+    PredictionStatus.Processing,
+    PredictionStatus.Succeeded,
+    PredictionStatus.Failed,
+    PredictionStatus.Canceled
+  ]).nullable(),
   prompt: z.string().nullable(),
   negative_prompt: z.string().nullable(),
   prompt_rewrite: z.string().nullable(),

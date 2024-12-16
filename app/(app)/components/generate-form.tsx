@@ -23,6 +23,7 @@ import {
   Clock3,
   Clock4,
 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 export default function GenerateForm() {
   const [prompt, setPrompt] = useState("");
@@ -32,7 +33,11 @@ export default function GenerateForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement form submission
+
+    toast({
+      title: "Added to queue",
+      description: "Please wait while we generate your video.",
+    });
   };
 
   return (
