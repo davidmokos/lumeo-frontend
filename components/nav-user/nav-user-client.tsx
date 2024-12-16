@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/sidebar"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
+import { ModeToggleInline } from "../theme-toggle"
 
 export function NavUserClient({
   user,
@@ -109,6 +110,8 @@ export function NavUserClient({
                 <Bell />
                 Notifications
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <ModeToggleInline />
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => signOut()}>

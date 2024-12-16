@@ -38,3 +38,14 @@ export function ModeToggle() {
     </DropdownMenu>
   )
 }
+
+export function ModeToggleInline() {
+  const { setTheme, theme } = useTheme()
+
+  return (
+    <DropdownMenuItem onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+      {theme === "light" ? <Moon /> : <Sun />}
+      {theme === "light" ? "Change to Dark Theme" : "Change to Light Theme"}
+    </DropdownMenuItem>
+  )
+}

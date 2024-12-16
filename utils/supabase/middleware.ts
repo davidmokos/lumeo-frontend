@@ -40,7 +40,7 @@ export async function updateSession(request: NextRequest) {
 
   if (
     !user &&
-    request.nextUrl.pathname.startsWith('/app')
+    request.nextUrl.pathname.startsWith('/discover')
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
@@ -54,7 +54,7 @@ export async function updateSession(request: NextRequest) {
   ) {
     // user is logged in, potentially respond by redirecting the user to the app
     const url = request.nextUrl.clone()
-    url.pathname = '/app'
+    url.pathname = '/discover'
     return NextResponse.redirect(url)
   }
 

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Toaster } from "@/components/ui/toaster";
+import GenerateForm from "./components/generate-form";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,13 +44,18 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <AppSidebar />
-            <SidebarInset>
-              <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-                <div className="flex items-center gap-2 px-4">
-                  <SidebarTrigger className="-ml-1" />
+            <SidebarInset className="relative">
+              <div className="relative flex flex-col h-screen">
+                <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+                  <div className="flex items-center gap-2 px-4">
+                    <SidebarTrigger className="-ml-1" />
+                  </div>
+                </header>
+                <main className="flex-1 overflow-y-auto pb-32">{children}</main>
+                <div className="absolute bottom-4 left-4 right-4 z-10">
+                  <GenerateForm />
                 </div>
-              </header>
-              <main>{children}</main>
+              </div>
               <Toaster />
             </SidebarInset>
           </SidebarProvider>

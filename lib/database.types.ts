@@ -7,34 +7,88 @@ export type Json =
   | Json[]
 
 export type Database = {
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          operationName?: string
-          query?: string
-          variables?: Json
-          extensions?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
-      [_ in never]: never
+      users: {
+        Row: {
+          created_at: string
+          credits_remaining: number | null
+          email: string | null
+          id: string
+          stripe_id: string | null
+          username: string | null
+        }
+        Insert: {
+          created_at?: string
+          credits_remaining?: number | null
+          email?: string | null
+          id?: string
+          stripe_id?: string | null
+          username?: string | null
+        }
+        Update: {
+          created_at?: string
+          credits_remaining?: number | null
+          email?: string | null
+          id?: string
+          stripe_id?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      "video-generations": {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          height: number | null
+          id: string
+          length: number | null
+          negative_prompt: string | null
+          prompt: string | null
+          prompt_rewrite: string | null
+          status: string | null
+          user_id: string | null
+          video_url: string | null
+          width: number | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          height?: number | null
+          id?: string
+          length?: number | null
+          negative_prompt?: string | null
+          prompt?: string | null
+          prompt_rewrite?: string | null
+          status?: string | null
+          user_id?: string | null
+          video_url?: string | null
+          width?: number | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          height?: number | null
+          id?: string
+          length?: number | null
+          negative_prompt?: string | null
+          prompt?: string | null
+          prompt_rewrite?: string | null
+          status?: string | null
+          user_id?: string | null
+          video_url?: string | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video-generations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
