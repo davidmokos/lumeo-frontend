@@ -5,7 +5,7 @@ export default async function DiscoverPage() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex-1 overflow-y-auto px-1 pb-20">
+      <div className="flex-1 overflow-y-auto px-2 pb-20">
         <div className="@container">
           <div className="columns-1 @[640px]:columns-2 @[1024px]:columns-3 gap-1 space-y-1">
             {videoGenerations.map((gen) => (
