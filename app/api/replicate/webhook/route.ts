@@ -15,8 +15,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // const webhookIsValid = await validateWebhook(request.clone(), secret);
-    const webhookIsValid = true; // for easy debugging. Don't forget to remove this before deploying!
+    const webhookIsValid = await validateWebhook(request.clone(), secret);
+    // const webhookIsValid = true; // for easy debugging. Don't forget to remove this before deploying!
 
     if (!webhookIsValid) {
       return NextResponse.json(

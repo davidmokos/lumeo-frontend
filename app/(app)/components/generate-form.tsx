@@ -22,6 +22,7 @@ import {
   Clock2,
   Clock3,
   Clock6,
+  Loader2,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { createVideoGeneration } from "../actions/actions";
@@ -31,10 +32,11 @@ export default function GenerateForm() {
   const [aspectRatio, setAspectRatio] = useState("16:9");
   const [resolution, setResolution] = useState("480p");
   const [duration, setDuration] = useState("5s");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setIsLoading(true);
     // Helper function to calculate dimensions
     const calculateDimensions = (aspectRatio: string, resolution: string) => {
       const resolutionMap = {
@@ -72,12 +74,26 @@ export default function GenerateForm() {
       height: height,
     }
 
-    await createVideoGeneration(data);
+    console.log(data);
+
+    try {
+      await createVideoGeneration(data);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "An error occurred while generating your video.",
+      });
+      setIsLoading(false);
+      return;
+    }
 
     toast({
       title: "Added to queue",
       description: "Please wait while we generate your video.",
     });
+
+    setIsLoading(false);
   };
 
   return (
@@ -92,12 +108,13 @@ export default function GenerateForm() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             className="min-h-[50px] max-h-[100px] resize-none border-none bg-transparent focus-visible:ring-0 placeholder:text-foreground/50"
+            disabled={isLoading}
           />
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap gap-2">
               <div className="w-fit">
-                <Select value={aspectRatio} onValueChange={setAspectRatio}>
+                <Select value={aspectRatio} onValueChange={setAspectRatio} disabled={isLoading}>
                   <SelectTrigger className="h-8 rounded-full backdrop-blur-xl border-white/10">
                     <SelectValue />
                   </SelectTrigger>
@@ -125,7 +142,7 @@ export default function GenerateForm() {
               </div>
 
               <div className="w-fit">
-                <Select value={resolution} onValueChange={setResolution}>
+                <Select value={resolution} onValueChange={setResolution} disabled={isLoading}>
                   <SelectTrigger className="h-8 rounded-full bg-background/50 border-white/10">
                     <SelectValue />
                   </SelectTrigger>
@@ -153,7 +170,7 @@ export default function GenerateForm() {
               </div>
 
               <div className="w-fit">
-                <Select value={duration} onValueChange={setDuration}>
+                <Select value={duration} onValueChange={setDuration} disabled={isLoading}>
                   <SelectTrigger className="h-8 rounded-full bg-background/50 border-white/10">
                     <SelectValue />
                   </SelectTrigger>
@@ -191,8 +208,9 @@ export default function GenerateForm() {
               type="submit"
               size="sm"
               className="rounded-full bg-primary/80 hover:bg-primary/90 backdrop-blur-sm"
+              disabled={isLoading}
             >
-              Generate
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Generate"}
             </Button>
           </div>
         </div>

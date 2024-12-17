@@ -38,9 +38,10 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
 
+  const protectedRoutes = ["/my-videos", "/discover"];
   if (
     !user &&
-    request.nextUrl.pathname.startsWith('/discover')
+    protectedRoutes.some((route) => request.nextUrl.pathname.startsWith(route))
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
