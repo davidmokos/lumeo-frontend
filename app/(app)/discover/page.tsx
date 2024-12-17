@@ -1,22 +1,7 @@
-import { createClient } from "@/utils/supabase/server";
-import { PredictionStatus } from "@/lib/models/video-generation";
+import { getDiscoverVideos } from "@/lib/data";
 
 export default async function DiscoverPage() {
-  const supabase = await createClient();
-
-  const { data: generations } = await supabase
-    .from("video-generations")
-    .select()
-    .eq("status", PredictionStatus.Succeeded)
-    .order("completed_at", { ascending: false })
-    .limit(20);
-
-  const videoGenerations =
-    generations?.map((gen) => ({
-      ...gen,
-      created_at: new Date(gen.created_at),
-      completed_at: gen.completed_at ? new Date(gen.completed_at) : null,
-    })) || [];
+  const videoGenerations = await getDiscoverVideos();
 
   return (
     <div className="flex flex-col">

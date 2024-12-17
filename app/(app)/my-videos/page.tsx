@@ -1,26 +1,11 @@
 import React from "react";
-import { createClient } from "@/utils/supabase/server";
+import { getUserVideos } from "@/lib/data";
 import { PredictionStatus } from "@/lib/models/video-generation";
 import { formatDistanceToNow } from "date-fns";
 import { Loader2, X } from "lucide-react";
 
 export default async function MyVideosPage() {
-  const supabase = await createClient();
-  const { data: user } = await supabase.auth.getUser();
-
-  const { data: generations } = await supabase
-    .from("video-generations")
-    .select()
-    .eq("user_id", user?.user?.id ?? "")
-    .order("completed_at", { ascending: false, nullsFirst: true })
-    .order("created_at", { ascending: false });
-
-  const videoGenerations =
-    generations?.map((gen) => ({
-      ...gen,
-      created_at: new Date(gen.created_at),
-      completed_at: gen.completed_at ? new Date(gen.completed_at) : null,
-    })) || [];
+  const videoGenerations = await getUserVideos();
 
   return (
     <div className="flex flex-col">
