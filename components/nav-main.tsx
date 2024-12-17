@@ -1,32 +1,17 @@
 "use client";
 
 import {
-  Bot,
-  ChevronRight,
-  Library,
-  ListMusic,
-  Loader2,
   PlaySquare,
+  Loader2,
   SquareLibrary,
-  SquareTerminal,
-  Star,
-  type LucideIcon,
 } from "lucide-react";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
+  SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { useVideoQueue } from "@/hooks/use-video-queue";
@@ -34,7 +19,7 @@ import { User } from "@supabase/supabase-js";
 import { usePathname } from "next/navigation";
 
 export function NavMain({ user }: { user: User | null }) {
-  const { queue } = useVideoQueue({ userId: user?.id ?? "" });
+  const { queueVideos } = useVideoQueue();
   const pathname = usePathname();
 
   return (
@@ -73,12 +58,12 @@ export function NavMain({ user }: { user: User | null }) {
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          {queue.length > 0 && (
+          {queueVideos.length > 0 && (
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Queue" asChild>
                 <div className="flex items-center gap-2">
                   <Loader2 className="animate-spin" />
-                  Generating ({queue.length})
+                  Generating ({queueVideos.length})
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>

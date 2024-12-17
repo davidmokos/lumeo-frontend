@@ -23,9 +23,9 @@ export default async function DiscoverPage() {
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
                   <p className="text-xs text-white truncate">{gen.prompt}</p>
-                  <p className="text-xs text-white/70">
+                  {/* <p className="text-xs text-white/70">
                     {gen.completed_at?.toLocaleDateString()}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             ))}

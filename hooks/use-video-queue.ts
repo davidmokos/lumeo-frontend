@@ -1,47 +1,67 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from 'react'
-import { VideoGeneration, PredictionStatus } from '@/lib/models/video-generation'
-import { createClient } from '@/utils/supabase/client'
+import { useContext, useEffect, useState } from "react";
+import {
+  VideoGeneration,
+  PredictionStatus,
+} from "@/lib/models/video-generation";
+import { createClient } from "@/utils/supabase/client";
+import { VideoQueueContext } from "./video-queue-context";
+import { getUserVideos } from "@/lib/data";
 
-export function useVideoQueue({userId}: {userId: string}) {
-  const supabase = createClient()
-  const [queue, setQueue] = useState<VideoGeneration[]>([])
+export function useVideoQueue() {
+  const context = useContext(VideoQueueContext);
+  if (!context) {
+    throw new Error("useVideoQueue must be used within a VideoQueueProvider");
+  }
+  return context;
+}
 
+export function useVideoQueueState(
+  userId: string,
+  initialVideos: VideoGeneration[] = []
+) {
+  const [allVideos, setAllVideos] = useState<VideoGeneration[]>(initialVideos);
+  const [queueVideos, setQueueVideos] = useState<VideoGeneration[]>([]);
+  const supabase = createClient();
 
   useEffect(() => {
-    fetchQueue()
+    if (!userId) return;
+
+    fetchVideos();
 
     const channel = supabase
-      .channel('video_generations')
+      .channel("video_generations")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'video-generations'
+          event: "*",
+          schema: "public",
+          table: "video-generations",
+          filter: `user_id=eq.${userId}`,
         },
-        (payload) => {
-          fetchQueue()
+        () => {
+          fetchVideos();
         }
       )
-      .subscribe()
+      .subscribe();
 
     return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [])
+      supabase.removeChannel(channel);
+    };
+  }, [userId]);
 
-  const fetchQueue = async () => {
-    const { data } = await supabase
-      .from('video-generations')
-      .select('*')
-      .eq('user_id', userId)
-      .in('status', [PredictionStatus.Starting, PredictionStatus.Processing])
-      .order('created_at', { ascending: false })
-    
-    if (data) setQueue(data)
-  }
+  const fetchVideos = async () => {
+    const allData = await getUserVideos();
+    setAllVideos(allData);
+    setQueueVideos(
+      allData.filter((video) =>
+        [PredictionStatus.Starting, PredictionStatus.Processing].includes(
+          video.status
+        )
+      )
+    );
+  };
 
-  return { queue }
+  return { allVideos, queueVideos };
 }
