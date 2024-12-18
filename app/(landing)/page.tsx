@@ -1,11 +1,12 @@
-import { Hero } from "./components/hero";
-import { Examples } from "./components/examples";
+import VideoMasonry from "@/components/video-masonry";
+import { getDiscoverVideos } from "@/lib/data";
 
-export default function Home() {
+export default async function Home() {
+  const videos = await getDiscoverVideos();
+
   return (
-    <div className="min-h-screen bg-black">
-      <Hero />
-      <Examples />
+    <div className="min-h-screen p-1">
+      <VideoMasonry videos={videos} />
     </div>
   );
 }

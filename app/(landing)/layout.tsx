@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import LogoLanding from "@/components/logo";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +38,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main>{children}</main>
+          <header className="fixed w-full top-0 z-50 bg-background/80 backdrop-blur-xl shadow-lg">
+            <div className="flex items-center justify-between gap-2 p-2">
+              <LogoLanding />
+              <Link className={buttonVariants({ variant: "outline" })} href="/login">Sign up</Link>
+            </div>
+          </header>
+          <main className="pt-[52px]">{children}</main>
           <Toaster />
         </ThemeProvider>
       </body>
