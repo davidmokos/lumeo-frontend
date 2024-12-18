@@ -1,7 +1,7 @@
 "use client";
 
-import { GalleryVerticalEnd } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -63,8 +63,8 @@ export function LoginForm({
       <div className="flex flex-col gap-6">
         <div className="flex flex-col items-center gap-2">
           <a href="#" className="flex flex-col items-center gap-2 font-medium">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md">
-              <GalleryVerticalEnd className="size-6" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-md">
+              <Image src="/logo.svg" alt="Lumeo" width={64} height={64} />
             </div>
             <span className="sr-only">Lumeo</span>
           </a>
