@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
 
       // Upload to Supabase Storage
       const fileName = `${replicate_prediction_id}.mp4`;
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("all-videos")
         .upload(fileName, videoBuffer, {
           contentType: "video/mp4",

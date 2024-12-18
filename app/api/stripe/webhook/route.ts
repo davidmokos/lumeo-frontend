@@ -1,4 +1,3 @@
-import { createServiceClient } from "@/utils/supabase/service";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -6,8 +5,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: NextRequest) {
-  const supabase = createServiceClient();
-
   const body = await req.text();
   const signature = req.headers.get("stripe-signature");
 
@@ -19,7 +16,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error }, { status: 400 });
   }
 
-  const { type: eventType, data: eventData } = event;
+  const { type: eventType } = event;
 
   try {
     if (eventType === "checkout.session.completed") {

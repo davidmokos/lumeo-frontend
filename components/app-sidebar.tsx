@@ -1,24 +1,9 @@
-
 import * as React from "react"
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Library,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { NavMain } from "@/components/nav-main"
@@ -35,7 +20,7 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
           <span>Vid</span>
       </SidebarHeader> */}
       <SidebarContent>
-        <NavMain user={user.user} />
+        <NavMain />
       </SidebarContent>
       <SidebarFooter>
         <NavUserClient user={user.user} />

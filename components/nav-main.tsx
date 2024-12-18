@@ -15,10 +15,9 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { useVideoQueue } from "@/hooks/use-video-queue";
-import { User } from "@supabase/supabase-js";
 import { usePathname } from "next/navigation";
 
-export function NavMain({ user }: { user: User | null }) {
+export function NavMain() {
   const { queueVideos } = useVideoQueue();
   const pathname = usePathname();
 
