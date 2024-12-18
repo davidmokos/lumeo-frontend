@@ -5,7 +5,7 @@ export default async function Home() {
   const videos = await getDiscoverVideos();
 
   return (
-    <div className="min-h-screen p-1">
+    <div className="min-h-screen px-1">
       <VideoMasonry videos={videos} />
     </div>
   );
