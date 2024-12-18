@@ -48,6 +48,7 @@ export type Database = {
           prompt: string | null
           prompt_rewrite: string | null
           replicate_prediction_id: string | null
+          show_in_discover: boolean | null
           status: string | null
           user_id: string | null
           video_url: string | null
@@ -64,6 +65,7 @@ export type Database = {
           prompt?: string | null
           prompt_rewrite?: string | null
           replicate_prediction_id?: string | null
+          show_in_discover?: boolean | null
           status?: string | null
           user_id?: string | null
           video_url?: string | null
@@ -80,6 +82,7 @@ export type Database = {
           prompt?: string | null
           prompt_rewrite?: string | null
           replicate_prediction_id?: string | null
+          show_in_discover?: boolean | null
           status?: string | null
           user_id?: string | null
           video_url?: string | null

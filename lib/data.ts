@@ -10,6 +10,7 @@ export async function getDiscoverVideos() {
     .from("video-generations")
     .select()
     .eq("status", PredictionStatus.Succeeded)
+    .eq("show_in_discover", true)
     .order("completed_at", { ascending: false })
     .limit(20);
 

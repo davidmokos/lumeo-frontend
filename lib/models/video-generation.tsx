@@ -31,6 +31,7 @@ export const VideoGenerationSchema = z.object({
   video_url: z.string().nullish(),
   model: z.string().nullish(),
   replicate_prediction_id: z.string().nullish(),
+  show_in_discover: z.boolean().nullish(),
 });
 
 export type VideoGeneration = z.infer<typeof VideoGenerationSchema>;
