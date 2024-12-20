@@ -23,6 +23,7 @@ import {
   Clock3,
   Clock6,
   Loader2,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { createVideoGeneration } from "../actions/actions";
@@ -42,7 +43,7 @@ export default function GenerateForm() {
       const resolutionMap = {
         "480p": 480,
         "720p": 720,
-        "1080p": 1080
+        "1080p": 1080,
       };
 
       const height = resolutionMap[resolution as keyof typeof resolutionMap];
@@ -72,7 +73,7 @@ export default function GenerateForm() {
       length: parseInt(duration) * 25,
       width: width,
       height: height,
-    }
+    };
 
     console.log(data);
 
@@ -102,20 +103,24 @@ export default function GenerateForm() {
         onSubmit={handleSubmit}
         className="space-y-4 max-w-3xl mx-auto w-full"
       >
-        <div className="rounded-3xl bg-background/50 backdrop-blur-xl border border-white/10 shadow-lg p-4">
+        <div className="rounded-3xl glass shadow-2xl p-4">
           <Textarea
             placeholder="Describe your video..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="min-h-[50px] max-h-[100px] resize-none border-none bg-transparent focus-visible:ring-0 placeholder:text-foreground/50"
+            className="min-h-[50px] max-h-[100px] resize-none border-none shadow-none bg-transparent focus-visible:ring-0 placeholder:text-foreground/50"
             disabled={isLoading}
           />
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap gap-2">
               <div className="w-fit">
-                <Select value={aspectRatio} onValueChange={setAspectRatio} disabled={isLoading}>
-                  <SelectTrigger className="h-8 rounded-full backdrop-blur-xl border-white/10">
+                <Select
+                  value={aspectRatio}
+                  onValueChange={setAspectRatio}
+                  disabled={isLoading}
+                >
+                  <SelectTrigger className="h-8 rounded-full text-muted-foreground bg-glass-level2 hover:bg-glass-hover border-none">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -142,8 +147,12 @@ export default function GenerateForm() {
               </div>
 
               <div className="w-fit">
-                <Select value={resolution} onValueChange={setResolution} disabled={isLoading}>
-                  <SelectTrigger className="h-8 rounded-full bg-background/50 border-white/10">
+                <Select
+                  value={resolution}
+                  onValueChange={setResolution}
+                  disabled={isLoading}
+                >
+                  <SelectTrigger className="h-8 rounded-full text-muted-foreground bg-glass-level2 hover:bg-glass-hover border-none">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -170,8 +179,12 @@ export default function GenerateForm() {
               </div>
 
               <div className="w-fit">
-                <Select value={duration} onValueChange={setDuration} disabled={isLoading}>
-                  <SelectTrigger className="h-8 rounded-full bg-background/50 border-white/10">
+                <Select
+                  value={duration}
+                  onValueChange={setDuration}
+                  disabled={isLoading}
+                >
+                  <SelectTrigger className="h-8 rounded-full text-muted-foreground bg-glass-level2 hover:bg-glass-hover border-none">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -207,10 +220,17 @@ export default function GenerateForm() {
             <Button
               type="submit"
               size="sm"
-              className="rounded-full bg-primary/80 hover:bg-primary/90 backdrop-blur-sm"
+              className="rounded-full"
               disabled={isLoading}
             >
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Generate"}
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4" />
+                  <span>Generate</span>
+                </div>
+              )}
             </Button>
           </div>
         </div>

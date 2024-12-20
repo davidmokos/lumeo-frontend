@@ -1,9 +1,9 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { PredictionStatus } from "@/lib/models/video-generation";
+import { PredictionStatus, VideoGeneration } from "@/lib/models/video-generation";
 
-export async function getDiscoverVideos() {
+export async function getDiscoverVideos(): Promise<VideoGeneration[]> {
   const supabase = await createClient();
 
   const { data: generations } = await supabase
@@ -21,7 +21,7 @@ export async function getDiscoverVideos() {
   })) || [];
 }
 
-export async function getUserVideos() {
+export async function getUserVideos(): Promise<VideoGeneration[]> {
   const supabase = await createClient();
   const { data: user } = await supabase.auth.getUser();
 
@@ -37,4 +37,20 @@ export async function getUserVideos() {
     created_at: new Date(gen.created_at),
     completed_at: gen.completed_at ? new Date(gen.completed_at) : null,
   })) || [];
+}
+
+export async function getVideoById(id: string): Promise<VideoGeneration | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("video-generations")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching video:", error);
+    return null;
+  }
+
+  return data as VideoGeneration;
 }
