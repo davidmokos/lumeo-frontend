@@ -55,11 +55,12 @@ export function useVideoQueueState(
     const allData = await getUserVideos();
     setAllVideos(allData);
     setQueueVideos(
-      allData.filter((video) =>
-        [PredictionStatus.Starting, PredictionStatus.Processing].includes(
-          video.status
-        )
-      )
+      allData.filter((video) => {
+        if (!video.status) return false;
+        if (video.status === PredictionStatus.Starting) return true;
+        if (video.status === PredictionStatus.Processing) return true;
+        return false;
+      })
     );
   };
 

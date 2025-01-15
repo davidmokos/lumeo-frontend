@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { Toaster } from "@/components/ui/toaster";
-import GenerateForm from "./components/generate-form";
 import { VideoQueueProvider } from "@/hooks/video-queue-context";
 import { createClient } from "@/utils/supabase/server";
+import { MyLecturesProvider } from "@/hooks/my-lectures-context";
 
 export const metadata: Metadata = {
   title: "Lumeo",
@@ -26,11 +26,10 @@ export default async function RootLayout({
   const { data: user } = await supabase.auth.getUser();
 
   return (
-    <VideoQueueProvider userId={user?.user?.id ?? ""} initialVideos={[]}>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={`antialiased`}
-        >
+    // <VideoQueueProvider userId={user?.user?.id ?? ""} initialVideos={[]}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`antialiased`}>
+        <MyLecturesProvider userId={user?.user?.id ?? ""} initialLectures={[]}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -46,17 +45,18 @@ export default async function RootLayout({
                       <SidebarTrigger className="-ml-1" />
                     </div>
                   </header>
-                  <main className="flex-1 overflow-y-auto pb-32">{children}</main>
-                  <div className="absolute bottom-4 left-4 right-4 z-10">
-                    <GenerateForm />
-                  </div>
+                  <main className="flex-1 overflow-y-auto pb-32">
+                    {children}
+                  </main>
                 </div>
                 <Toaster />
               </SidebarInset>
             </SidebarProvider>
           </ThemeProvider>
-        </body>
-      </html>
-    </VideoQueueProvider>
+        </MyLecturesProvider>
+      </body>
+    </html>
+
+    // </VideoQueueProvider>
   );
 }

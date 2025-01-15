@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  PlaySquare,
-  Loader2,
-  SquareLibrary,
-} from "lucide-react";
+import { PlaySquare, Loader2, SquareLibrary, Lightbulb, Plus } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -16,9 +12,10 @@ import {
 import Link from "next/link";
 import { useVideoQueue } from "@/hooks/use-video-queue";
 import { usePathname } from "next/navigation";
+import { useMyLectures } from "@/hooks/use-my-lectures";
 
 export function NavMain() {
-  const { queueVideos } = useVideoQueue();
+  const { lectures } = useMyLectures();
   const pathname = usePathname();
 
   return (
@@ -44,7 +41,7 @@ export function NavMain() {
       <SidebarGroup>
         <SidebarGroupLabel>Library</SidebarGroupLabel>
         <SidebarMenu>
-          <SidebarMenuItem>
+          {/* <SidebarMenuItem>
             <SidebarMenuButton
               isActive={pathname === "/my-videos"}
               tooltip="My Videos"
@@ -55,9 +52,38 @@ export function NavMain() {
                 My Videos
               </Link>
             </SidebarMenuButton>
+          </SidebarMenuItem> */}
+
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              isActive={pathname === "/create"}
+              tooltip="Create"
+              asChild
+            >
+              <Link href="/create">
+                <Plus />
+                Create new
+              </Link>
+            </SidebarMenuButton>
           </SidebarMenuItem>
 
-          {queueVideos.length > 0 && (
+          {lectures.map((lecture) => (
+            <SidebarMenuItem key={lecture.id}>
+              <SidebarMenuButton
+                isActive={pathname === `/create/${lecture.id}`}
+                tooltip={lecture.title || "Untitled"}
+                asChild
+              >
+                <Link href={`/create/${lecture.id}`}>
+                  <span className="truncate">
+                    {lecture.title || "Untitled"}
+                  </span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+
+          {/* {queueVideos.length > 0 && (
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Queue" asChild>
                 <div className="flex items-center gap-2">
@@ -66,7 +92,7 @@ export function NavMain() {
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          )}
+          )} */}
         </SidebarMenu>
       </SidebarGroup>
     </>

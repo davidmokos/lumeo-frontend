@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { PredictionStatus, VideoGeneration } from "@/lib/models/video-generation";
+import { Lecture, Scene } from "./models/lecture";
 
 export async function getDiscoverVideos(): Promise<VideoGeneration[]> {
   const supabase = await createClient();
@@ -54,3 +55,31 @@ export async function getVideoById(id: string): Promise<VideoGeneration | null> 
 
   return data as VideoGeneration;
 }
+
+
+export async function getUserLectures(): Promise<Lecture[]> {
+  const supabase = await createClient();
+  const { data: user } = await supabase.auth.getUser();
+
+  const { data: lectures } = await supabase
+    .from("lectures")
+    .select()
+    .eq("user_id", user?.user?.id ?? "")
+    .order("created_at", { ascending: false });
+
+  return lectures || [];
+}
+
+export async function getScenes(lectureId: string): Promise<Scene[]> {
+  const supabase = await createClient();
+  const { data: user } = await supabase.auth.getUser();
+
+  const { data: scenes } = await supabase
+    .from("scenes")
+    .select()
+    .eq("lecture_id", lectureId)
+    .order("created_at", { ascending: false });
+
+  return scenes || [];
+}
+
