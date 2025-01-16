@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Lecture, Scene } from "@/lib/models/lecture";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
+import { EditSceneDialog } from "./edit-scene-dialog";
 
 interface SceneListProps {
   initialLecture: Lecture;
@@ -14,6 +15,22 @@ export function SceneList({ initialLecture, initialScenes }: SceneListProps) {
   const [lecture, setLecture] = useState<Lecture>(initialLecture);
   const [scenes, setScenes] = useState<Scene[]>(initialScenes);
   const supabase = createClient();
+
+  // Get the latest version of each scene by index
+  const latestScenes = scenes.reduce((acc, scene) => {
+    if (scene.index === undefined || scene.index === null) return acc;
+    
+    const existingScene = acc.get(scene.index);
+    if (!existingScene || (scene.version && existingScene.version && scene.version > existingScene.version)) {
+      acc.set(scene.index, scene);
+    }
+    return acc;
+  }, new Map<number, Scene>());
+
+  // Convert map to array and sort by index
+  const sortedScenes = Array.from(latestScenes.values()).sort((a, b) => 
+    (a.index ?? 0) - (b.index ?? 0)
+  );
 
   useEffect(() => {
     if (!lecture.id) return;
@@ -80,7 +97,7 @@ export function SceneList({ initialLecture, initialScenes }: SceneListProps) {
 
   return (
     <div className="space-y-8">
-      {scenes.map((scene) => (
+      {sortedScenes.map((scene) => (
         <div
           key={scene.id}
           className="grid grid-cols-2 gap-8 p-6 rounded-lg border bg-card"
@@ -96,14 +113,19 @@ export function SceneList({ initialLecture, initialScenes }: SceneListProps) {
                 controls
                 className="w-full h-full object-cover"
               />
-            ) : null}
+            ) : <div className="absolute inset-0 flex items-center justify-center">
+                <X className="h-8 w-8" />
+              </div>}
           </div>
           <div className="space-y-4">
-            <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Scene {scene.index}</h3>
-              <p className="text-sm text-muted-foreground">
-                Status: {scene.status}
-              </p>
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Scene {scene.index}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {scene.status.charAt(0).toUpperCase() + scene.status.slice(1)} {scene.version && `(version ${scene.version})`}
+                </p>
+              </div>
+              <EditSceneDialog scene={scene} />
             </div>
             {scene.voiceover && (
               <div className="prose prose-sm max-w-none">

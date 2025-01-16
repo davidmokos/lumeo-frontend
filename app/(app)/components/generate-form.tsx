@@ -8,11 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 
-const API_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://davidmokos--learn-anything-api.modal.run/api/v1"
-    : "https://davidmokos--learn-anything-api-dev.modal.run/api/v1";
-
 export function GenerateForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [topic, setTopic] = useState("");
@@ -25,9 +20,7 @@ export function GenerateForm() {
     setIsLoading(true);
 
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
           title: "Error",
@@ -37,49 +30,28 @@ export function GenerateForm() {
         return;
       }
 
-      const response = await fetch(
-        `${API_BASE_URL}/generate/${user.id}/lecture`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            topic,
-            resources,
-          }),
-        }
-      );
+      const response = await fetch(`https://davidmokos--learn-anything-api.modal.rundev.modal.run/api/v1/generate/${user.id}/lecture`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          topic,
+          resources,
+        }),
+      });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(
-          errorData?.message ||
-            `Failed to generate lecture (${response.status}: ${response.statusText})`
-        );
+        throw new Error("Failed to generate lecture");
       }
 
       const data = await response.json();
-
-      if (!data.lecture_id) {
-        throw new Error("No lecture ID returned from the server");
-      }
-
-      toast({
-        title: "Success",
-        description:
-          "Lecture generation started. You'll be redirected to the lecture page.",
-      });
-
       router.push(`/create/${data.lecture_id}`);
     } catch (error) {
-      console.error("Generation error:", error);
+      console.error(error);
       toast({
         title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to generate lecture. Please try again.",
+        description: "Failed to generate lecture. Please try again.",
         variant: "destructive",
       });
     } finally {
