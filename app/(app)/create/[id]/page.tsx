@@ -31,14 +31,7 @@ export default async function LectureCreatePage({ params }: LectureCreatePagePro
     .order("index", { ascending: true });
 
   return (
-    <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold">{lecture.title || lecture.topic}</h1>
-        {lecture.resources && (
-          <p className="mt-2 text-muted-foreground">{lecture.resources}</p>
-        )}
-      </div>
-
+    <div className="container p-4">
       <SceneList initialLecture={lecture} initialScenes={scenes || []} />
     </div>
   );

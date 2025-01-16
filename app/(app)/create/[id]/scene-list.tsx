@@ -84,57 +84,57 @@ export function SceneList({ initialLecture, initialScenes }: SceneListProps) {
     };
   }, [lecture.id]);
 
-  if (scenes.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin" />
-          <p className="text-muted-foreground">Generating scenes...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-8">
-      {sortedScenes.map((scene) => (
-        <div
-          key={scene.id}
-          className="grid grid-cols-2 gap-8 p-6 rounded-lg border bg-card"
-        >
-          <div className="aspect-video relative rounded-lg overflow-hidden bg-muted">
-            {scene.status === "processing" ? (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin" />
-              </div>
-            ) : scene.video_url ? (
-              <video
-                src={scene.video_url}
-                controls
-                className="w-full h-full object-cover"
-              />
-            ) : <div className="absolute inset-0 flex items-center justify-center">
-                <X className="h-8 w-8" />
-              </div>}
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold">Scene {scene.index}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {scene.status.charAt(0).toUpperCase() + scene.status.slice(1)} {scene.version && `(version ${scene.version})`}
-                </p>
-              </div>
-              <EditSceneDialog scene={scene} />
-            </div>
-            {scene.voiceover && (
-              <div className="prose prose-sm max-w-none">
-                <p>{scene.voiceover}</p>
-              </div>
-            )}
+      <h1 className="text-2xl font-bold">{lecture.title || lecture.topic}</h1>
+
+      {scenes.length === 0 ? (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <p className="text-muted-foreground">Generating scenes...</p>
           </div>
         </div>
-      ))}
+      ) : (
+        sortedScenes.map((scene) => (
+          <div
+            key={scene.id}
+            className="grid grid-cols-2 gap-8 p-6 rounded-lg border bg-card"
+          >
+            <div className="aspect-video relative rounded-lg overflow-hidden bg-muted">
+              {scene.status === "processing" ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Loader2 className="h-8 w-8 animate-spin" />
+                </div>
+              ) : scene.video_url ? (
+                <video
+                  src={scene.video_url}
+                  controls
+                  className="w-full h-full object-cover"
+                />
+              ) : <div className="absolute inset-0 flex items-center justify-center">
+                  <X className="h-8 w-8" />
+                </div>}
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">Scene {scene.index}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {scene.status.charAt(0).toUpperCase() + scene.status.slice(1)} {scene.version && `(version ${scene.version})`}
+                  </p>
+                </div>
+                <EditSceneDialog scene={scene} />
+              </div>
+              {scene.voiceover && (
+                <div className="prose prose-sm max-w-none">
+                  <p>{scene.voiceover}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 } 
