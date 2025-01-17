@@ -30,7 +30,7 @@ export function GenerateForm() {
         return;
       }
 
-      const response = await fetch(`https://davidmokos--learn-anything-api.modal.rundev.modal.run/api/v1/generate/${user.id}/lecture`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/generate/${user.id}/lecture`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

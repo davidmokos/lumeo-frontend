@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { PredictionStatus, VideoGeneration } from "@/lib/models/video-generation";
 import { Lecture, Scene } from "./models/lecture";
+import { notFound } from "next/navigation";
 
 export async function getDiscoverVideos(): Promise<VideoGeneration[]> {
   const supabase = await createClient();
@@ -68,6 +69,45 @@ export async function getUserLectures(): Promise<Lecture[]> {
     .order("created_at", { ascending: false });
 
   return lectures || [];
+}
+
+export async function getDiscoverLectures(): Promise<Lecture[]> {
+  const supabase = await createClient();
+
+  const { data: lectures } = await supabase
+    .from("lectures")
+    .select()
+    .eq("status", "published")
+    .order("created_at", { ascending: false });
+
+  return lectures || [];
+}
+
+export async function getLectureWithScenes(id: string): Promise<{ lecture: Lecture; scenes: Scene[] }> {
+  const supabase = await createClient();
+
+  // Fetch lecture
+  const { data: lecture, error: lectureError } = await supabase
+    .from("lectures")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (lectureError || !lecture) {
+    notFound();
+  }
+
+  // Fetch scenes
+  const { data: scenes } = await supabase
+    .from("scenes")
+    .select("*")
+    .eq("lecture_id", id)
+    .order("index", { ascending: true });
+
+  return {
+    lecture,
+    scenes: scenes || []
+  };
 }
 
 export async function getScenes(lectureId: string): Promise<Scene[]> {
