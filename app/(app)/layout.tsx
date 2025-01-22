@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { Toaster } from "@/components/ui/toaster";
-import { VideoQueueProvider } from "@/hooks/video-queue-context";
 import { createClient } from "@/utils/supabase/server";
 import { MyLecturesProvider } from "@/hooks/my-lectures-context";
 

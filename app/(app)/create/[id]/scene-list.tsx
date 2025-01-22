@@ -14,7 +14,7 @@ interface SceneListProps {
 export function SceneList({ initialLecture, initialScenes }: SceneListProps) {
   const [lecture, setLecture] = useState<Lecture>(initialLecture);
   const [scenes, setScenes] = useState<Scene[]>(initialScenes);
-  const supabase = createClient();
+  
 
   // Get the latest version of each scene by index
   const latestScenes = scenes.reduce((acc, scene) => {
@@ -35,6 +35,8 @@ export function SceneList({ initialLecture, initialScenes }: SceneListProps) {
   useEffect(() => {
     if (!lecture.id) return;
 
+    const supabase = createClient();
+    
     // Subscribe to lecture changes
     const lectureChannel = supabase
       .channel("lecture_changes")
@@ -88,6 +90,27 @@ export function SceneList({ initialLecture, initialScenes }: SceneListProps) {
     <div className="space-y-8">
       <h1 className="text-2xl font-bold">{lecture.title || lecture.topic}</h1>
 
+      {/* Full Lecture Video */}
+      <div className="aspect-video relative rounded-lg overflow-hidden bg-muted">
+        {lecture.video_url ? (
+          <video
+            key={lecture.video_url} // Force video reload when URL changes
+            src={lecture.video_url}
+            poster={lecture.thumbnail_url}
+            controls
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-2">
+              <Loader2 className="h-8 w-8 animate-spin" />
+              <p className="text-sm text-muted-foreground">Generating full video...</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Scenes */}
       {scenes.length === 0 ? (
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="flex flex-col items-center gap-4">

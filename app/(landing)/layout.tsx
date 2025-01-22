@@ -30,7 +30,10 @@ export default function RootLayout({
           <header className="fixed w-full top-0 z-50 bg-background/80 backdrop-blur-xl shadow-lg">
             <div className="flex items-center justify-between gap-2 p-2">
               <LogoLanding href="/" />
-              <Link className={buttonVariants({ variant: "default" })} href="/login">Sign up</Link>
+              <div className="flex items-center gap-2">
+                <Link className={buttonVariants({ variant: "outline" })} href="/login">Login</Link>
+                <Link className={buttonVariants({ variant: "default" })} href="/login">Sign up</Link>
+              </div>
             </div>
           </header>
           <main className="pt-[52px]">{children}</main>

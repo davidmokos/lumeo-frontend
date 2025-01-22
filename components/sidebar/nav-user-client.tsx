@@ -1,12 +1,8 @@
 "use client"
 
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-react"
 
 import {
@@ -61,7 +57,7 @@ export function NavUserClient({
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.user_metadata.avatar_url} alt={user.user_metadata.username ?? user.email} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">{user.user_metadata.username?.charAt(0).toUpperCase() ?? user.email?.charAt(0).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.user_metadata.username ?? user.email}</span>

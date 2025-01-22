@@ -1,5 +1,5 @@
 import React from 'react'
-import { GenerateForm } from '../components/generate-form'
+import { GenerateForm } from '@/components/generate-form'
 
 export default function CreatePage() {
   return (

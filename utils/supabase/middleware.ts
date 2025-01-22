@@ -38,7 +38,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
 
-  const protectedRoutes = ["/my-videos", "/discover"];
+  const protectedRoutes = ["/create", "/discover"];
   if (
     !user &&
     protectedRoutes.some((route) => request.nextUrl.pathname.startsWith(route))
@@ -51,13 +51,14 @@ export async function updateSession(request: NextRequest) {
 
   if (
     user &&
-    request.nextUrl.pathname.startsWith('/login')
+    (request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname === '/')
   ) {
     // user is logged in, potentially respond by redirecting the user to the app
     const url = request.nextUrl.clone()
     url.pathname = '/discover'
     return NextResponse.redirect(url)
   }
+
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:
