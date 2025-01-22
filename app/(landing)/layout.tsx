@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import LogoLanding from "@/components/logo";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import GitHubIcon from "@/components/github-icon";
 
 export const metadata: Metadata = {
   title: "Lumeo",
@@ -18,9 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`antialiased`}
-      >
+      <body className={`antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -31,8 +30,30 @@ export default function RootLayout({
             <div className="flex items-center justify-between gap-2 p-2">
               <LogoLanding href="/" />
               <div className="flex items-center gap-2">
-                <Link className={buttonVariants({ variant: "outline" })} href="/login">Login</Link>
-                <Link className={buttonVariants({ variant: "default" })} href="/login">Sign up</Link>
+                <Link
+                  href="https://github.com/davidmokos/lumeo-frontend"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={buttonVariants({
+                    variant: "ghost",
+                  })}
+                >
+                  Star on
+                  <GitHubIcon />
+                  <span className="sr-only">GitHub</span>
+                </Link>
+                <Link
+                  className={buttonVariants({ variant: "outline" })}
+                  href="/login"
+                >
+                  Login
+                </Link>
+                <Link
+                  className={buttonVariants({ variant: "default" })}
+                  href="/login"
+                >
+                  Sign up
+                </Link>
               </div>
             </div>
           </header>
